@@ -30,8 +30,7 @@ app.include_router(support.router)
 
 # index.html is in the GitHub repository root
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-FRONTEND = PROJECT_ROOT / "index.html"
-
+FRONTEND = PROJECT_ROOT / "frontend" / "index.html"
 
 @app.get("/health")
 def health():
