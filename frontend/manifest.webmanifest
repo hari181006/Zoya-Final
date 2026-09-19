@@ -1,0 +1,9 @@
+{
+  "name": "Zoya Services",
+  "short_name": "Zoya Services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#071f55",
+  "theme_color": "#0b3b91",
+  "description": "Citizen services portal"
+}

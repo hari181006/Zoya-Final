@@ -1,0 +1,2920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="manifest" href="/manifest.webmanifest">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#155eef" />
+    <title>Zoya Services - Citizen Services</title>
+
+    <style>
+        :root {
+            --primary: #155eef;
+            --primary-dark: #1047b5;
+            --dark: #0f1f3d;
+            --green: #12b76a;
+            --red: #d92d20;
+            --orange: #f79009;
+            --background: #f5f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #667085;
+            --border: #e4e7ec;
+            --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* AUTHENTICATION */
+
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #155eef, #0f1f3d);
+        }
+
+        .auth-card {
+            width: min(100%, 470px);
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+        }
+
+        .auth-logo {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            margin: auto;
+            border-radius: 17px;
+            background: linear-gradient(135deg, #3185ff, #13b6a4);
+            color: #ffffff;
+            font-size: 29px;
+        }
+
+        .auth-card h1 {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 27px;
+        }
+
+        .auth-subtitle {
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+            margin: 5px 0 25px;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            background: #f2f4f7;
+            padding: 5px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+        }
+
+        .auth-tab {
+            padding: 10px 5px;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .auth-tab.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(16, 24, 40, 0.08);
+        }
+
+        .auth-form {
+            display: grid;
+            gap: 9px;
+        }
+
+        .auth-form h2 {
+            margin-bottom: 7px;
+            font-size: 21px;
+        }
+
+        .auth-form label {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .auth-form input,
+        .auth-form textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 13px;
+            outline: none;
+        }
+
+        .auth-form input:focus,
+        .auth-form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .auth-button {
+            color: #ffffff;
+            background: var(--primary);
+            padding: 13px;
+            border-radius: 9px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .auth-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .text-button {
+            color: var(--primary);
+            background: transparent;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px dashed #98a2b3;
+            background: #f2f4f7;
+            border-radius: 9px;
+            padding: 10px 13px;
+            margin-top: 8px;
+        }
+
+        .captcha-text {
+            color: var(--primary);
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+
+        .captcha-refresh {
+            color: var(--muted);
+            background: transparent;
+            font-size: 20px;
+        }
+
+        .consent {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 12px !important;
+            font-weight: normal !important;
+            line-height: 1.4;
+        }
+
+        .consent input {
+            width: auto !important;
+            margin-top: 3px;
+        }
+
+        .demo-note,
+        .security-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 13px;
+        }
+
+        .security-note {
+            color: #b54708;
+        }
+
+        /* MAIN APP */
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--dark);
+            color: #ffffff;
+            padding: 24px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #3185ff, #13b6a4);
+            font-size: 22px;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+        }
+
+        .brand small {
+            color: #b8c6e3;
+            font-size: 11px;
+        }
+
+        .nav {
+            display: grid;
+            gap: 7px;
+        }
+
+        .nav button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: transparent;
+            color: #d8e2f5;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            color: #ffffff;
+            background: #1d386d;
+        }
+
+        .sidebar-note {
+            position: absolute;
+            bottom: 22px;
+            left: 20px;
+            right: 20px;
+            color: #aebddd;
+            font-size: 11px;
+        }
+
+        .main {
+            width: calc(100% - 260px);
+            margin-left: 260px;
+        }
+
+        .topbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 0 30px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            font-size: 24px;
+            margin-right: auto;
+        }
+
+        .language,
+        .profile-button {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #ffffff;
+        }
+
+        .content {
+            max-width: 1450px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 32px;
+            color: #ffffff;
+            border-radius: 22px;
+            background: linear-gradient(120deg, #155eef, #1d4ed8, #0ea5a0);
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 7px;
+        }
+
+        .hero p {
+            color: #dbeafe;
+        }
+
+        .search-box {
+            min-width: 340px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 18px 16px 44px;
+            border: 0;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 11px;
+            left: 15px;
+            color: var(--muted);
+            font-size: 22px;
+        }
+
+        .notice {
+            padding: 15px;
+            margin: 20px 0;
+            color: #164c72;
+            background: #eff8ff;
+            border: 1px solid #b9e1ff;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 26px 0 15px;
+        }
+
+        .section-heading h2,
+        .section-heading h3 {
+            margin-bottom: 4px;
+        }
+
+        .section-heading p,
+        .page-header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+        }
+
+        .service-card {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            transition: 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            background: #eff6ff;
+            font-size: 25px;
+        }
+
+        .service-card h3 {
+            font-size: 17px;
+            margin-bottom: 7px;
+        }
+
+        .service-card p {
+            flex: 1;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 11px 15px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            color: #ffffff;
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            color: var(--primary-dark);
+            background: #eef4ff;
+        }
+
+        .btn-green {
+            color: #087443;
+            background: #e8f8f0;
+        }
+
+        .btn-outline {
+            color: var(--text);
+            background: #ffffff;
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            color: var(--red);
+            background: #fff0ef;
+        }
+
+        .full {
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h2 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .service-detail {
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            gap: 22px;
+        }
+
+        .panel {
+            padding: 24px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+        }
+
+        .panel h3 {
+            margin-bottom: 15px;
+        }
+
+        .steps {
+            display: grid;
+            gap: 13px;
+            margin-top: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 13px;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .step-number {
+            width: 27px;
+            height: 27px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            border-radius: 50%;
+            color: #ffffff;
+            background: var(--primary);
+            font-weight: bold;
+        }
+
+        .documents {
+            display: grid;
+            gap: 10px;
+        }
+
+        .document-item {
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .official-box {
+            padding: 15px;
+            margin: 18px 0;
+            color: #087443;
+            background: #effbf4;
+            border: 1px solid #b7e4cc;
+            border-radius: 11px;
+            font-size: 13px;
+        }
+
+        /* SUPPORT AND PROFILE */
+
+        .form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form label {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form input,
+        .form select,
+        .form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+        }
+
+        .form input:focus,
+        .form select:focus,
+        .form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px #dbeafe;
+        }
+
+        .footer {
+            margin-top: 35px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* ADMIN */
+
+        .admin-dashboard {
+            min-height: 100vh;
+            padding: 30px;
+            background: var(--background);
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .admin-header h1 {
+            margin-bottom: 4px;
+        }
+
+        .admin-header p {
+            color: var(--muted);
+        }
+
+        .admin-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .admin-stat {
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .admin-stat span {
+            font-size: 25px;
+        }
+
+        .admin-stat h3 {
+            margin: 9px 0 3px;
+            font-size: 24px;
+        }
+
+        .admin-stat p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 0.8fr;
+            gap: 20px;
+        }
+
+        .admin-panel {
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+        }
+
+        .admin-panel h2 {
+            margin-bottom: 17px;
+            font-size: 19px;
+        }
+
+        .admin-panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .admin-panel form {
+            display: grid;
+            gap: 9px;
+        }
+
+        .admin-panel label {
+            margin-top: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .admin-panel input,
+        .admin-panel textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eaecf0;
+            text-align: left;
+        }
+
+        .user-table th {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .user-table .user-actions { white-space: nowrap; }
+        .remove-user-btn { padding: 7px 10px; border-radius: 8px; color: var(--red); background: #fff0ef; border: 1px solid #fecdca; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .remove-user-btn:hover { background: #fee4e2; }
+
+        /* ADMIN SUPPORT REQUESTS */
+        .support-request-list{display:grid;gap:12px;max-height:520px;overflow-y:auto}
+        .support-request-card{padding:15px;border:1px solid var(--border);border-radius:12px;background:#f8fafc}
+        .support-request-card.unread{border-left:4px solid var(--primary);background:#eff6ff}
+        .support-request-meta{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+        .support-request-meta strong{font-size:14px}.support-request-meta small{color:var(--muted);font-size:11px}
+        .support-request-preview{color:#475467;font-size:13px;margin-bottom:10px;white-space:pre-wrap;word-break:break-word}
+        .support-request-actions{display:flex;gap:8px;flex-wrap:wrap}
+        .support-read-btn{padding:8px 11px;border-radius:8px;color:#fff;background:var(--primary);font-size:12px;font-weight:bold;cursor:pointer}
+        .support-read-btn:hover{background:var(--primary-dark)}
+        .support-empty{padding:18px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:10px;background:#f8fafc}
+        .support-modal{display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;padding:20px;background:rgba(15,31,61,.58)}
+        .support-modal.show{display:flex}.support-modal-card{width:min(100%,620px);max-height:85vh;overflow-y:auto;padding:24px;background:#fff;border-radius:17px;box-shadow:0 25px 70px rgba(0,0,0,.25)}
+        .support-modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:18px}
+        .support-close-btn{width:34px;height:34px;border-radius:8px;background:#f2f4f7;color:#344054;font-size:20px;cursor:pointer}
+        .support-detail{display:grid;gap:12px}.support-detail-row{padding:12px;border-radius:10px;background:#f8fafc;border:1px solid var(--border)}
+        .support-detail-row label{display:block;margin-bottom:4px;color:var(--muted);font-size:11px;font-weight:bold;text-transform:uppercase}
+        .support-detail-message{white-space:pre-wrap;word-break:break-word;line-height:1.6}
+
+        /* TOAST */
+
+        .toast {
+            display: none;
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 50;
+            padding: 14px 17px;
+            color: #ffffff;
+            background: #101828;
+            border-radius: 10px;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @media (max-width: 950px) {
+
+            .service-detail,
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 720px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: 0.25s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .topbar {
+                justify-content: flex-start;
+                padding: 0 15px;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .profile-button {
+                display: none;
+            }
+
+            .content {
+                padding: 20px 15px 50px;
+            }
+
+            .hero {
+                display: block;
+                padding: 24px;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .search-box {
+                min-width: 0;
+                margin-top: 20px;
+            }
+
+            .form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .admin-dashboard {
+                padding: 20px 15px;
+            }
+
+            .admin-stat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .admin-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .user-table {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .admin-stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card {
+                padding: 22px;
+            }
+        }
+    
+        /* ZOYA VOICE ASSISTANT */
+        .zoya-voice-button { position:fixed; right:22px; bottom:22px; z-index:90; width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,#155eef,#0ea5a0); color:#fff; font-size:25px; box-shadow:0 12px 30px rgba(16,24,40,.25); display:none; align-items:center; justify-content:center; }
+        .zoya-voice-button.show { display:flex; }
+        .zoya-voice-button.listening { animation:zoyaPulse 1.2s infinite; }
+        @keyframes zoyaPulse { 50% { transform:scale(1.10); box-shadow:0 0 0 12px rgba(21,94,239,.15),0 12px 30px rgba(16,24,40,.25); } }
+        .zoya-voice-status { position:fixed; right:22px; bottom:90px; z-index:91; width:min(360px,calc(100vw - 44px)); padding:13px 15px; background:#fff; border:1px solid var(--border); border-radius:13px; box-shadow:var(--shadow); display:none; font-size:13px; }
+        .zoya-voice-status.show { display:block; }
+        .zoya-voice-status strong { display:block; margin-bottom:4px; }
+        .zoya-voice-status small { color:var(--muted); }
+
+        .service-back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #d0d5dd;
+            background: #ffffff;
+            color: #344054;
+            border-radius: 10px;
+            padding: 9px 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+        }
+
+        .service-back-button:hover {
+            background: #f8fafc;
+        }
+
+        .bank-service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .bank-service-card {
+            border: 1px solid #e4e7ec;
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+        }
+
+        .bank-service-card h4 {
+            margin: 0 0 8px;
+        }
+
+        .bank-service-card p {
+            margin: 0;
+            color: #667085;
+            line-height: 1.5;
+        }
+
+        .common-docs-list {
+            margin: 10px 0 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .common-docs-note {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e4e7ec;
+            color: #475467;
+        }
+
+</style>
+</head>
+
+<body>
+    <!-- AUTHENTICATION PAGE -->
+
+    <div id="authPage" class="auth-page">
+        <div class="auth-card">
+            <div class="auth-logo">✦</div>
+
+            <h1>Zoya Services</h1>
+            <p class="auth-subtitle">
+                All essential citizen services in one place
+            </p>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab">Login</button>
+                <button class="auth-tab" id="registerTab">Register</button>
+                <button class="auth-tab" id="adminTab">Admin</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm" class="auth-form">
+                <h2>User Login</h2>
+
+                <label for="loginMobile">Mobile number</label>
+                <input id="loginMobile" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number" required />
+
+                <label for="loginPassword">Password</label>
+                <input id="loginPassword" type="password" placeholder="Enter password" required />
+
+                <div class="captcha-box">
+                    <span class="captcha-text" id="loginCaptchaText"></span>
+                    <button type="button" class="captcha-refresh" id="refreshLoginCaptcha">
+                        ↻
+                    </button>
+                </div>
+
+                <input id="loginCaptchaInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter CAPTCHA" required />
+
+                <button class="auth-button" type="submit">
+                    Login
+                </button>
+
+                <button type="button" class="text-button" id="forgotPassword">
+                    Forgot password?
+                </button>
+            </form>
+
+            <!-- REGISTER FORM -->
+
+            <form id="registerForm" class="auth-form hidden">
+                <h2>Create account</h2>
+
+                <label for="registerName">Full name</label>
+                <input id="registerName" type="text" placeholder="Enter full name" required />
+
+                <label for="registerMobile">Mobile number</label>
+                <input id="registerMobile" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number" required />
+
+                <label for="registerEmail">Email</label>
+                <input id="registerEmail" type="email" placeholder="Enter email address" required />
+
+                <label for="registerPassword">Create password</label>
+                <input id="registerPassword" type="password" minlength="8" placeholder="Minimum 8 characters" required />
+
+                <label for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" type="password" minlength="8" placeholder="Confirm password" required />
+
+                <div class="captcha-box">
+                    <span class="captcha-text" id="registerCaptchaText"></span>
+                    <button type="button" class="captcha-refresh" id="refreshRegisterCaptcha">
+                        ↻
+                    </button>
+                </div>
+
+                <input id="registerCaptchaInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter CAPTCHA" required />
+
+                <label class="consent">
+                    <input id="privacyConsent" type="checkbox" required />
+                    <span>
+                        I agree to the privacy notice and understand that Zoya Services is an
+                        independent service platform.
+                    </span>
+                </label>
+
+                <button class="auth-button" type="submit">
+                    Register
+                </button>
+            </form>
+
+            <!-- ADMIN FORM -->
+
+            <form id="adminForm" class="auth-form hidden">
+                <h2>Admin Login</h2>
+
+                <label for="adminUserId">Admin user ID</label>
+                <input id="adminUserId" type="text" placeholder="Enter admin user ID" required />
+
+                <label for="adminPassword">Admin password</label>
+                <input id="adminPassword" type="password" placeholder="Enter admin password" required />
+
+                <div class="captcha-box">
+                    <span class="captcha-text" id="adminCaptchaText"></span>
+                    <button type="button" class="captcha-refresh" id="refreshAdminCaptcha">
+                        ↻
+                    </button>
+                </div>
+
+                <input id="adminCaptchaInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter CAPTCHA" required />
+
+                <button class="auth-button" type="submit">
+                    Admin Login
+                </button>
+
+                <p class="security-note">
+                    Admin authentication must use a secure backend and MFA in production.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- USER APPLICATION -->
+
+    <div id="userApp" class="app hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+
+                <div>
+                    <h1>Zoya Services</h1>
+                    <small>Citizen services</small>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <button class="active" data-page="home">⌂ Home</button>
+                <button data-page="pan">🪪 PAN Card</button>
+                <button data-page="voter">🗳️ Voter ID</button>
+                <button data-page="passport">🌐 Passport</button>
+                <button data-page="aadhaar">🔐 Aadhaar</button>
+                <button data-page="bank">🏦 Bank Account</button>
+                <button data-page="employment">💼 Employment</button>
+                <button data-page="certificates">📜 Certificates</button>
+                <button data-page="licence">🚗 Driving Licence</button>
+                <button data-page="esevai">🏛️ Tamil Nadu e-Sevai</button>
+                <button data-page="support">💬 Assistance</button>
+                <button data-page="profile">♙ Profile</button>
+            </nav>
+
+            <div class="sidebar-note">
+                
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <button class="menu-button" id="menuButton">☰</button>
+
+                <select class="language" id="language">
+                    <option value="en">English</option>
+                    <option value="ta">தமிழ்</option>
+                </select>
+
+                <button class="profile-button" id="userLogout">
+                    <span id="dashboardProfileLabel">Profile</span> · Logout
+                </button>
+            
+                <div class="dashboard-user-name" style="margin-left:auto;font-weight:700;">
+                    Welcome, <span id="dashboardUserName">User</span>
+                </div>
+</header>
+
+            <div class="content">
+                <!-- HOME -->
+
+                <section class="page active" id="page-home">
+                    <div class="hero">
+                        <div>
+                            <h2>Hello, <span id="dashboardGreetingName">User</span> 👋</h2>
+                            <p>
+                                Find trusted information and links for essential citizen services.
+                            </p>
+                        </div>
+
+                        <div class="search-box">
+                            <span class="search-icon">⌕</span>
+                            <input type="search" id="serviceSearch" placeholder="What service do you need?" />
+                        </div>
+                    </div>
+
+                    <div class="notice">
+                        ⓘ Zoya Services is not a government department, bank, Aadhaar centre,
+                        Passport Seva Kendra or transport authority. Always verify the official
+                        website before submitting personal information or making a payment.
+                    </div>
+
+                    <div class="section-heading">
+                        <div>
+                            <h2>Citizen Services</h2>
+                            <p>Select a service to open its dedicated page.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-grid" id="homeServices"></div>
+
+                    <div class="footer">
+                        Zoya Services provides information, guidance and links to official services.
+                    </div>
+                </section>
+
+                <!-- PAN -->
+
+                <section class="page" id="page-pan">
+                    <button type="button" class="service-back-button" data-back-home>← Back to Dashboard</button>
+                    <div class="page-header">
+                        <h2>🪪 PAN Card Services</h2>
+                        <p>Available PAN services and commonly needed documents.</p>
+                    </div>
+                    <div class="panel">
+                        <h3>Available PAN Services</h3>
+                        <div class="bank-service-grid">
+                            <div class="bank-service-card"><h4>🆕 New PAN Card</h4><p>Apply for a new PAN card.</p></div>
+                            <div class="bank-service-card"><h4>✏️ PAN Correction / Update</h4><p>Correct or update eligible PAN details such as name or date of birth.</p></div>
+                            <div class="bank-service-card"><h4>🔁 PAN Reprint / Replacement</h4><p>Request a reprint or replacement PAN card when applicable.</p></div>
+                            <div class="bank-service-card"><h4>🔗 PAN-Aadhaar Linking</h4><p>Check or complete PAN-Aadhaar linking through the applicable official portal.</p></div>
+                            <div class="bank-service-card"><h4>🔎 PAN Application Status</h4><p>Check the status of a PAN application or request.</p></div>
+                            <div class="bank-service-card"><h4>📄 Other PAN Services</h4><p>Access other eligible PAN-related services through the official providers.</p></div>
+                        </div>
+                    </div>
+                    <div class="panel" style="margin-top:18px;">
+                        <h3>📂 Common Documents Needed</h3>
+                        <ul class="common-docs-list">
+                            <li><strong>Identity proof:</strong> Aadhaar Card, Passport, Voter ID, Driving Licence or another accepted document.</li>
+                            <li><strong>Address proof:</strong> Aadhaar Card, Passport, Voter ID, Driving Licence or another accepted document.</li>
+                            <li><strong>Date of birth proof:</strong> an accepted document showing date of birth, where required.</li>
+                            <li><strong>Recent photograph:</strong> where required by the selected application method.</li>
+                            <li><strong>Signature:</strong> as required for the selected application process.</li>
+                            <li><strong>Mobile number / email:</strong> for communication or verification where required.</li>
+                        </ul>
+                        <div class="common-docs-note"><strong>Important:</strong> Exact requirements can vary by service and applicant. Check the latest requirements on the official portal before applying.</div>
+                    </div>
+                    <div class="panel" style="margin-top:18px;">
+                        <h3>Official PAN Application Options</h3>
+                        <div class="bank-service-grid">
+                            <div class="bank-service-card"><h4>NSDL PAN / Protean</h4><p>Official Protean PAN services.</p><div class="official-box" style="margin-top:12px;"><strong>Official Link:</strong><br><a href="https://www.protean-tinpan.com/" target="_blank" rel="noopener noreferrer">https://www.protean-tinpan.com/</a></div><a class="btn btn-primary" href="https://www.protean-tinpan.com/" target="_blank" rel="noopener noreferrer">Open Official Portal ↗</a></div>
+                            <div class="bank-service-card"><h4>UTI PAN</h4><p>Official UTIITSL PAN services.</p><div class="official-box" style="margin-top:12px;"><strong>Official Link:</strong><br><a href="https://www.pan.utiitsl.com/" target="_blank" rel="noopener noreferrer">https://www.pan.utiitsl.com/</a></div><a class="btn btn-primary" href="https://www.pan.utiitsl.com/" target="_blank" rel="noopener noreferrer">Open Official Portal ↗</a></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VOTER -->
+
+                <section class="page" id="page-voter">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>🗳️ Voter ID Services</h2>
+                        <p>
+                            Registration, correction, address change and electoral roll guidance.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>Voter services</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>Select new registration, correction or address change.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>Complete the official voter service form.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>
+                                        Upload or prepare the required supporting documents.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Save the official reference number for tracking.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Voter services are processed through the Election Commission’s
+                                official portal.
+                            </div>
+
+                            <a class="btn btn-primary" href="https://voters.eci.gov.in/" target="_blank" rel="noopener">
+                                Open official voter portal ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Common documents</h3>
+
+                            <div class="documents">
+                                <div class="document-item">☐ Age proof</div>
+                                <div class="document-item">☐ Address proof</div>
+                                <div class="document-item">☐ Recent photograph</div>
+                                <div class="document-item">
+                                    ☐ Existing voter details for correction
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PASSPORT -->
+
+                <section class="page" id="page-passport">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>🌐 Passport Services</h2>
+                        <p>
+                            Passport application, renewal, appointment and status guidance.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>Passport application steps</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>Register on the Passport Seva portal.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>Complete the application form.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>Pay the official fee.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Book an appointment at the appropriate centre.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">5</span>
+                                    <span>
+                                        Attend the appointment and complete verification if applicable.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Zoya Services does not issue passports and cannot guarantee appointment
+                                availability.
+                            </div>
+
+                            <a class="btn btn-primary" href="https://www.passportindia.gov.in/" target="_blank" rel="noopener">
+                                Open official Passport Seva ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Common documents</h3>
+
+                            <div class="documents">
+                                <div class="document-item">
+                                    ☐ Existing passport for reissue
+                                </div>
+                                <div class="document-item">
+                                    ☐ Address proof where applicable
+                                </div>
+                                <div class="document-item">
+                                    ☐ Date-of-birth proof where applicable
+                                </div>
+                                <div class="document-item">
+                                    ☐ Other documents based on application type
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AADHAAR -->
+
+                <section class="page" id="page-aadhaar">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>🔐 Aadhaar Services</h2>
+                        <p>
+                            Guidance for Aadhaar updates, downloads and enrolment centre searches.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>Aadhaar services</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>
+                                        Check whether your requested service is available online.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>
+                                        For centre-based updates, locate an authorised Aadhaar centre.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>
+                                        Carry the required original supporting documents.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Save the official update request details.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Do not enter Aadhaar numbers, OTPs or biometric information into
+                                this demo application.
+                            </div>
+
+                            <a class="btn btn-primary" href="https://uidai.gov.in/" target="_blank" rel="noopener">
+                                Open official UIDAI portal ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Possible requirements</h3>
+
+                            <div class="documents">
+                                <div class="document-item">
+                                    ☐ Accepted identity proof
+                                </div>
+                                <div class="document-item">
+                                    ☐ Accepted address proof
+                                </div>
+                                <div class="document-item">
+                                    ☐ Mobile number for authorised verification
+                                </div>
+                                <div class="document-item">
+                                    ☐ Original documents for centre visits
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BANK -->
+
+                <section class="page" id="page-bank">
+                    <button type="button" class="service-back-button" data-back-home>
+                        ← Back to Dashboard
+                    </button>
+
+                    <div class="page-header">
+                        <h2>🏦 Bank Services</h2>
+                        <p>Choose a banking service to see what you need before applying.</p>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Available Banking Services</h3>
+
+                        <div class="bank-service-grid">
+                            <div class="bank-service-card">
+                                <h4>🏦 Account Opening</h4>
+                                <p>Open a savings or other eligible bank account through the bank's official process.</p>
+                            </div>
+
+                            <div class="bank-service-card">
+                                <h4>💳 Debit / ATM Card</h4>
+                                <p>Request a debit card and check the bank's eligibility and delivery requirements.</p>
+                            </div>
+
+                            <div class="bank-service-card">
+                                <h4>📱 Internet / Mobile Banking</h4>
+                                <p>Register for digital banking and manage your account online through the official bank portal.</p>
+                            </div>
+
+                            <div class="bank-service-card">
+                                <h4>🏠 Loan Services</h4>
+                                <p>Explore eligible personal, home, education or other loan services offered by the bank.</p>
+                            </div>
+
+                            <div class="bank-service-card">
+                                <h4>📄 KYC / Profile Update</h4>
+                                <p>Update KYC information or personal details according to the bank's current process.</p>
+                            </div>
+
+                            <div class="bank-service-card">
+                                <h4>💰 Fixed / Recurring Deposit</h4>
+                                <p>Check available deposit schemes, eligibility and required documents.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-top:18px;">
+                        <h3>📂 Account Opening — Common Documents Needed</h3>
+                        <p>These are commonly requested documents. The exact requirements can differ by bank, account type and applicant.</p>
+
+                        <ul class="common-docs-list">
+                            <li><strong>Identity proof:</strong> Aadhaar Card, Passport, Voter ID or Driving Licence.</li>
+                            <li><strong>Address proof:</strong> an accepted document showing your current address.</li>
+                            <li><strong>PAN Card:</strong> or Form 60 where applicable.</li>
+                            <li><strong>Passport-size photograph:</strong> if required by the bank.</li>
+                            <li><strong>Mobile number:</strong> an active number for verification and banking alerts.</li>
+                            <li><strong>Email address:</strong> where requested for communication and digital banking.</li>
+                            <li><strong>Additional documents:</strong> may be required for specific account types, applicants or services.</li>
+                        </ul>
+
+                        <div class="common-docs-note">
+                            <strong>Important:</strong> Before submitting documents, verify the latest requirements on the selected bank's official website or at an authorised branch. Never share your PIN, CVV, password or OTP with this application.
+                        </div>
+                    </div>
+
+                    <div class="panel" style="margin-top:18px;">
+                        <h3>🏛️ Select Bank</h3>
+
+                        <div class="form-group">
+                            <label for="bankSelect">Bank</label>
+                            <select id="bankSelect">
+                                <option value="">-- Select Bank --</option>
+                                <option value="https://www.sbi.co.in/" data-bank="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                                <option value="https://www.hdfcbank.com/" data-bank="HDFC Bank">HDFC Bank</option>
+                                <option value="https://www.icicibank.com/" data-bank="ICICI Bank">ICICI Bank</option>
+                                <option value="https://www.axisbank.com/" data-bank="Axis Bank">Axis Bank</option>
+                                <option value="https://www.kotak.com/" data-bank="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                                <option value="https://www.indianbank.in/" data-bank="Indian Bank">Indian Bank</option>
+                                <option value="https://www.bankofbaroda.in/" data-bank="Bank of Baroda">Bank of Baroda</option>
+                                <option value="https://www.canarabank.com/" data-bank="Canara Bank">Canara Bank</option>
+                                <option value="https://www.unionbankofindia.co.in/" data-bank="Union Bank of India">Union Bank of India</option>
+                                <option value="https://www.pnbindia.in/" data-bank="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
+                                <option value="https://www.bankofindia.co.in/" data-bank="Bank of India">Bank of India</option>
+                                <option value="https://www.centralbankofindia.co.in/" data-bank="Central Bank of India">Central Bank of India</option>
+                                <option value="https://www.indianoverseasbank.in/" data-bank="Indian Overseas Bank">Indian Overseas Bank</option>
+                                <option value="https://www.ucobank.com/" data-bank="UCO Bank">UCO Bank</option>
+                                <option value="https://www.federalbank.co.in/" data-bank="Federal Bank">Federal Bank</option>
+                                <option value="https://www.yesbank.in/" data-bank="YES BANK">YES BANK</option>
+                                <option value="https://www.idfcfirstbank.com/" data-bank="IDFC FIRST Bank">IDFC FIRST Bank</option>
+                                <option value="https://www.bandhanbank.com/" data-bank="Bandhan Bank">Bandhan Bank</option>
+                                <option value="https://www.rblbank.com/" data-bank="RBL Bank">RBL Bank</option>
+                                <option value="https://www.indusind.com/" data-bank="IndusInd Bank">IndusInd Bank</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" type="button" id="openBankPortal">
+                            Open Official Bank Portal ↗
+                        </button>
+                    </div>
+                </section>
+
+                <!-- EMPLOYMENT -->
+
+                <section class="page" id="page-employment">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>💼 Employment Services</h2>
+                        <p>
+                            Search for jobs, government opportunities, apprenticeships and skills.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>Employment hub</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>Create or update your employment profile.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>
+                                        Search government, private, part-time and internship
+                                        opportunities.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>
+                                        Review employer details and application requirements.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Apply through the official or verified employment provider.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Check every job advertisement carefully and never pay money for a
+                                job without independent verification.
+                            </div>
+
+                            <a class="btn btn-primary" href="https://www.ncs.gov.in/" target="_blank" rel="noopener">
+                                Open National Career Service ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Employment tools</h3>
+
+                            <div class="documents">
+                                <div class="document-item">📄 Resume builder</div>
+                                <div class="document-item">🔎 Job search</div>
+                                <div class="document-item">🎓 Skill development</div>
+                                <div class="document-item">🧑‍💼 Interview preparation</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CERTIFICATES -->
+
+                <section class="page" id="page-certificates">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>📜 Certificate Services</h2>
+                        <p>
+                            Guidance for income, community, nativity, residence and other
+                            certificates.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>Certificate application steps</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>Select the required certificate.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>
+                                        Select your state, district and responsible authority.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>Prepare the official document checklist.</span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Apply through the official state portal or authorised centre.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Requirements vary by certificate, state and district. Confirm the
+                                latest requirements on the official portal.
+                            </div>
+
+                            <a class="btn btn-primary" href="https://www.tnesevai.tn.gov.in/" target="_blank" rel="noopener">
+                                Open Tamil Nadu e-Sevai ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Available guidance</h3>
+
+                            <div class="documents">
+                                <div class="document-item">Income certificate</div>
+                                <div class="document-item">Community certificate</div>
+                                <div class="document-item">Nativity certificate</div>
+                                <div class="document-item">Residence certificate</div>
+                                <div class="document-item">Birth certificate guidance</div>
+                                <div class="document-item">Legal heir certificate guidance</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DRIVING LICENCE -->
+
+                <section class="page" id="page-licence">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>🚗 Driving Licence Services</h2>
+                        <p>
+                            Learner licence, new licence, renewal, correction and transport
+                            guidance.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>Driving licence steps</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>
+                                        Choose learner licence, new licence, renewal or correction.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>
+                                        Complete the application on the official transport portal.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>
+                                        Pay the official fee shown by the portal.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Attend a test or appointment if required.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Zoya Services does not issue driving licences or guarantee appointment
+                                availability.
+                            </div>
+
+                            <a class="btn btn-primary" href="https://parivahan.gov.in/" target="_blank" rel="noopener">
+                                Open official Parivahan portal ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Common documents</h3>
+
+                            <div class="documents">
+                                <div class="document-item">☐ Age proof</div>
+                                <div class="document-item">☐ Address proof</div>
+                                <div class="document-item">
+                                    ☐ Existing licence for renewal
+                                </div>
+                                <div class="document-item">
+                                    ☐ Medical certificate where applicable
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAMIL NADU E-SEVAI -->
+
+                <section class="page" id="page-esevai">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>🏛️ Tamil Nadu e-Sevai</h2>
+                        <p>
+                            Access Tamil Nadu citizen services through the official state
+                            platform.
+                        </p>
+                    </div>
+
+                    <div class="service-detail">
+                        <div class="panel">
+                            <h3>e-Sevai process</h3>
+
+                            <div class="steps">
+                                <div class="step">
+                                    <span class="step-number">1</span>
+                                    <span>
+                                        Choose the required Tamil Nadu government service.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">2</span>
+                                    <span>
+                                        Check whether online submission or an e-Sevai centre is
+                                        required.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">3</span>
+                                    <span>
+                                        Prepare the service-specific documents.
+                                    </span>
+                                </div>
+
+                                <div class="step">
+                                    <span class="step-number">4</span>
+                                    <span>
+                                        Submit the request and keep the official receipt.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="official-box">
+                                Use only the official Tamil Nadu e-Sevai domain before entering
+                                personal information or paying fees.
+                            </div>
+
+                            <a class="btn btn-green" href="https://www.tnesevai.tn.gov.in/" target="_blank" rel="noopener">
+                                Open official Tamil Nadu e-Sevai ↗
+                            </a>
+                        </div>
+
+                        <div class="panel">
+                            <h3>Typical services</h3>
+
+                            <div class="documents">
+                                <div class="document-item">Income certificate</div>
+                                <div class="document-item">Community certificate</div>
+                                <div class="document-item">Nativity certificate</div>
+                                <div class="document-item">Residence certificate</div>
+                                <div class="document-item">
+                                    Licences and other state services
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SUPPORT -->
+
+                <section class="page" id="page-support">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button>
+                        <div class="page-header">
+                        <h2>💬 Get Assistance</h2>
+                        <p>
+                            Request help with service instructions and official portal
+                            navigation.
+                        </p>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Submit a support request</h3>
+
+                        <form class="form" id="supportForm">
+                            <div class="form-group">
+                                <label for="supportName">Name</label>
+                                <input id="supportName" type="text" placeholder="Your name" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="supportMobile">Mobile number</label>
+                                <input id="supportMobile" type="tel" placeholder="10-digit mobile number" required />
+                            </div>
+
+                            <div class="form-group full">
+                                <label for="supportMessage">How can we help?</label>
+                                <textarea id="supportMessage" rows="5" placeholder="Write your request" required></textarea>
+                            </div>
+
+                            <div class="form-group full">
+                                <button class="btn btn-primary" type="submit">
+                                    Submit support request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- PROFILE -->
+
+                <section class="page" id="page-profile">
+                    <button type="button" class="service-back-button" data-back-home>
+                            ← Back to Dashboard
+                        </button><div class="page-header"><h2>♙ Profile & Privacy</h2></div>
+
+                    <div class="panel">
+                        <form class="form" id="profileForm">
+                            <div class="form-group">
+                                <label for="profileName">Full name</label>
+                                <input id="profileName" value="" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profileMobile">Mobile number</label>
+                                <input id="profileMobile" value="" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input id="profileEmail" value="" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="profileDistrict">District</label>
+                                <select id="profileDistrict">
+                                    <option value="Ariyalur">Ariyalur</option>
+                                    <option value="Chengalpattu">Chengalpattu</option>
+                                    <option value="Chennai">Chennai</option>
+                                    <option value="Coimbatore">Coimbatore</option>
+                                    <option value="Cuddalore">Cuddalore</option>
+                                    <option value="Dharmapuri">Dharmapuri</option>
+                                    <option value="Dindigul">Dindigul</option>
+                                    <option value="Erode">Erode</option>
+                                    <option value="Kallakurichi">Kallakurichi</option>
+                                    <option value="Kancheepuram">Kancheepuram</option>
+                                    <option value="Karur">Karur</option>
+                                    <option value="Krishnagiri">Krishnagiri</option>
+                                    <option value="Madurai">Madurai</option>
+                                    <option value="Mayiladuthurai">Mayiladuthurai</option>
+                                    <option value="Nagapattinam">Nagapattinam</option>
+                                    <option value="Namakkal">Namakkal</option>
+                                    <option value="Nilgiris">Nilgiris</option>
+                                    <option value="Perambalur">Perambalur</option>
+                                    <option value="Pudukkottai">Pudukkottai</option>
+                                    <option value="Ramanathapuram">Ramanathapuram</option>
+                                    <option value="Ranipet">Ranipet</option>
+                                    <option value="Salem">Salem</option>
+                                    <option value="Sivaganga">Sivaganga</option>
+                                    <option value="Tenkasi">Tenkasi</option>
+                                    <option value="Thanjavur">Thanjavur</option>
+                                    <option value="Theni">Theni</option>
+                                    <option value="Thoothukudi">Thoothukudi</option>
+                                    <option value="Tiruchirappalli">Tiruchirappalli</option>
+                                    <option value="Tirunelveli">Tirunelveli</option>
+                                    <option value="Tirupathur">Tirupathur</option>
+                                    <option value="Tiruppur">Tiruppur</option>
+                                    <option value="Tiruvallur">Tiruvallur</option>
+                                    <option value="Tiruvannamalai">Tiruvannamalai</option>
+                                    <option value="Tiruvarur">Tiruvarur</option>
+                                    <option value="Vellore">Vellore</option>
+                                    <option value="Viluppuram">Viluppuram</option>
+                                    <option value="Virudhunagar">Virudhunagar</option>
+                                    <option value="Kanyakumari">Kanyakumari</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full">
+                                <label for="profileAddress">Address</label>
+                                <textarea id="profileAddress" rows="4">
+Chennai, Tamil Nadu</textarea>
+                            </div>
+
+                            <div class="form-group full">
+                                <button class="btn btn-primary" type="submit">
+                                    Save profile
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr style="
+                border: 0;
+                border-top: 1px solid #e4e7ec;
+                margin: 25px 0;
+              " />
+
+                        <h3>Privacy center</h3>
+
+                        <button class="btn btn-outline" id="downloadProfile">
+                            Download profile data
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+
+    <section id="adminDashboard" class="admin-dashboard hidden">
+        <div class="admin-header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Manage registered users and service information.</p>
+            </div>
+
+            <button class="btn btn-danger" id="adminLogout">
+                Admin Logout
+            </button>
+        </div>
+
+        <div class="admin-stat-grid">
+            <div class="admin-stat">
+                <span>👥</span>
+                <h3 id="totalUsers">0</h3>
+                <p>Total Users</p>
+            </div>
+
+            <div class="admin-stat">
+                <span>📄</span>
+                <h3 id="totalServices">9</h3>
+                <p>Services</p>
+            </div>
+
+            <div class="admin-stat">
+                <span>💬</span>
+                <h3 id="totalRequests">0</h3>
+                <p>Support Requests</p>
+            </div>
+
+            <div class="admin-stat">
+                <span>🔐</span>
+                <h3>Active</h3>
+                <p>Admin Session</p>
+            </div>
+        </div>
+
+        <div class="admin-grid">
+            <div class="admin-panel">
+                <div class="admin-panel-heading">
+                    <h2>Registered Users</h2>
+                    <button class="btn btn-secondary" id="refreshUsers">Refresh</button>
+                </div>
+                <div id="userTable"></div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="admin-panel-heading">
+                    <h2>Support Requests</h2>
+                    <button class="btn btn-secondary" id="refreshRequests">Refresh</button>
+                </div>
+                <div id="supportRequestList" class="support-request-list"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="support-modal" id="supportModal" role="dialog" aria-modal="true">
+        <div class="support-modal-card">
+            <div class="support-modal-header">
+                <div><h2>Support Request</h2><p style="color:var(--muted);font-size:13px;margin-top:4px;">Complete message submitted by the user.</p></div>
+                <button type="button" class="support-close-btn" id="closeSupportModal" aria-label="Close">×</button>
+            </div>
+            <div class="support-detail">
+                <div class="support-detail-row"><label>Name</label><div id="supportDetailName"></div></div>
+                <div class="support-detail-row"><label>Mobile Number</label><div id="supportDetailMobile"></div></div>
+                <div class="support-detail-row"><label>Submitted</label><div id="supportDetailDate"></div></div>
+                <div class="support-detail-row"><label>Message</label><div id="supportDetailMessage" class="support-detail-message"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <button id="zoyaVoiceButton" class="zoya-voice-button" type="button" aria-label="Zoya voice assistant">🎙️</button>
+    <div id="zoyaVoiceStatus" class="zoya-voice-status">
+        <strong id="zoyaVoiceTitle">Zoya Voice Assistant</strong>
+        <span id="zoyaVoiceText">Tap the microphone and speak.</span><br>
+        <small>Try: “Open PAN card”, “Go to profile”, “Search bank account”, “Logout”.</small>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /*
+      DEMO AUTHENTICATION ONLY
+
+      Demo user:
+      Mobile: 9876543210
+      Password: User@123
+
+      Demo admin:
+      User ID: admin
+      Password: Admin@123
+
+      Do not use these credentials in production.
+    */
+
+        const services = [{
+                id: "pan",
+                name: "PAN Card",
+                icon: "🪪",
+                description: "New PAN, corrections, reprint and status guidance."
+            },
+            {
+                id: "voter",
+                name: "Voter ID",
+                icon: "🗳️",
+                description: "Registration, corrections, address change and roll search."
+            },
+            {
+                id: "passport",
+                name: "Passport",
+                icon: "🌐",
+                description: "New passport, renewal, appointment and status guidance."
+            },
+            {
+                id: "aadhaar",
+                name: "Aadhaar",
+                icon: "🔐",
+                description: "Update guidance, download help and centre search."
+            },
+            {
+                id: "bank",
+                name: "Bank Account",
+                icon: "🏦",
+                description: "Compare account types and visit official bank onboarding."
+            },
+            {
+                id: "employment",
+                name: "Employment",
+                icon: "💼",
+                description: "Jobs, government vacancies, skills and resume tools."
+            },
+            {
+                id: "certificates",
+                name: "Certificates",
+                icon: "📜",
+                description: "Income, community, nativity and residence guidance."
+            },
+            {
+                id: "licence",
+                name: "Driving Licence",
+                icon: "🚗",
+                description: "Learner licence, renewal, correction and status guidance."
+            },
+            {
+                id: "esevai",
+                name: "Tamil Nadu e-Sevai",
+                icon: "🏛️",
+                description: "Tamil Nadu citizen services through the official portal."
+            }
+        ];
+
+        function readStorageArray(key) {
+            try {
+                const value = JSON.parse(localStorage.getItem(key) || "[]");
+                return Array.isArray(value) ? value : [];
+            } catch (error) {
+                console.warn("Resetting invalid localStorage data for:", key);
+                localStorage.removeItem(key);
+                return [];
+            }
+        }
+
+        const API_BASE = (location.protocol === "file:" || location.protocol === "about:") ? "http://127.0.0.1:8000" : location.origin;
+        let users = [];
+        let supportRequests = [];
+        let currentUser = null;
+        let accessToken = localStorage.getItem("zoyaAccessToken") || "";
+        let adminToken = localStorage.getItem("zoyaAdminToken") || "";
+
+        async function apiRequest(path, options = {}) {
+            const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+            const token = options.admin ? adminToken : accessToken;
+            if (token) headers.Authorization = `Bearer ${token}`;
+            const response = await fetch(API_BASE + path, { ...options, headers });
+            let data = {};
+            try { data = await response.json(); } catch (_) {}
+            if (!response.ok) throw new Error(data.detail || data.message || `Request failed (${response.status})`);
+            return data;
+        }
+
+        async function loadAdminUsers() {
+            const data = await apiRequest("/api/admin/users", { admin: true });
+            users = data;
+            renderAdminUsers();
+        }
+
+        async function loadSupportRequests() {
+            if (!adminToken) return;
+            try {
+                supportRequests = await apiRequest("/api/admin/support-requests", { admin: true });
+                renderSupportRequests();
+            } catch (_) {}
+        }
+
+        const authPage = document.getElementById("authPage");
+        const userApp = document.getElementById("userApp");
+        const adminDashboard = document.getElementById("adminDashboard");
+        const sidebar = document.getElementById("sidebar");
+        const toastBox = document.getElementById("toast");
+
+        function updateUserDisplayName(name) {
+            const displayName = name || "User";
+
+            const dashboardProfileLabel =
+                document.getElementById("dashboardProfileLabel");
+            const dashboardGreetingName =
+                document.getElementById("dashboardGreetingName");
+            const dashboardUserName =
+                document.getElementById("dashboardUserName");
+            const profileHeadingName =
+                document.getElementById("profileHeadingName");
+
+            if (dashboardProfileLabel) dashboardProfileLabel.textContent = displayName;
+            if (dashboardGreetingName) dashboardGreetingName.textContent = displayName;
+            if (dashboardUserName) dashboardUserName.textContent = displayName;
+            if (profileHeadingName) profileHeadingName.textContent = displayName;
+        }
+
+        function showToast(message) {
+            if (!toastBox) {
+                alert(message);
+                return;
+            }
+            toastBox.textContent = message;
+            toastBox.classList.add("show");
+
+            setTimeout(() => {
+                toastBox.classList.remove("show");
+            }, 3000);
+        }
+
+        function generateCaptcha() {
+            const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let captcha = "";
+
+            for (let i = 0; i < 6; i++) {
+                captcha += characters.charAt(
+                    Math.floor(Math.random() * characters.length)
+                );
+            }
+
+            return captcha;
+        }
+
+        function normalizeCaptcha(value) {
+            return String(value || "")
+                .replace(/\s+/g, "")
+                .toUpperCase();
+        }
+
+        function refreshCaptcha(type) {
+            const map = {
+                login: {
+                    display: "loginCaptchaText",
+                    input: "loginCaptchaInput"
+                },
+                register: {
+                    display: "registerCaptchaText",
+                    input: "registerCaptchaInput"
+                },
+                admin: {
+                    display: "adminCaptchaText",
+                    input: "adminCaptchaInput"
+                }
+            };
+
+            const ids = map[type];
+            if (!ids) return;
+
+            const display = document.getElementById(ids.display);
+            const input = document.getElementById(ids.input);
+
+            if (!display) return;
+
+            const value = generateCaptcha();
+
+            // Store the answer directly on the CAPTCHA display element.
+            display.textContent = value;
+            display.dataset.answer = value;
+
+            if (input) {
+                input.value = "";
+                input.removeAttribute("aria-invalid");
+            }
+        }
+
+        function isCaptchaCorrect(type) {
+            const map = {
+                login: {
+                    display: "loginCaptchaText",
+                    input: "loginCaptchaInput"
+                },
+                register: {
+                    display: "registerCaptchaText",
+                    input: "registerCaptchaInput"
+                },
+                admin: {
+                    display: "adminCaptchaText",
+                    input: "adminCaptchaInput"
+                }
+            };
+
+            const ids = map[type];
+            if (!ids) return false;
+
+            const display = document.getElementById(ids.display);
+            const input = document.getElementById(ids.input);
+
+            if (!display || !input) return false;
+
+            const answer = normalizeCaptcha(display.dataset.answer);
+            const entered = normalizeCaptcha(input.value);
+
+            return answer.length === 6 && entered.length === 6 && entered === answer;
+        }
+
+        function showAuthPage() {
+            authPage.classList.remove("hidden");
+            userApp.classList.add("hidden");
+            adminDashboard.classList.add("hidden");
+        }
+
+        function showUserApp() {
+            authPage.classList.add("hidden");
+            userApp.classList.remove("hidden");
+            adminDashboard.classList.add("hidden");
+        }
+
+        function showAdminDashboard() {
+            authPage.classList.add("hidden");
+            userApp.classList.add("hidden");
+            adminDashboard.classList.remove("hidden");
+            loadAdminUsers().catch(error => showToast(error.message));
+            loadSupportRequests();
+        }
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll(".auth-tab").forEach(button => {
+                button.classList.remove("active");
+            });
+
+            document.querySelectorAll(".auth-form").forEach(form => {
+                form.classList.add("hidden");
+            });
+
+            if (tab === "login") {
+                document.getElementById("loginTab").classList.add("active");
+                document.getElementById("loginForm").classList.remove("hidden");
+                refreshCaptcha("login");
+            }
+
+            if (tab === "register") {
+                document.getElementById("registerTab").classList.add("active");
+                document.getElementById("registerForm").classList.remove("hidden");
+                refreshCaptcha("register");
+            }
+
+            if (tab === "admin") {
+                document.getElementById("adminTab").classList.add("active");
+                document.getElementById("adminForm").classList.remove("hidden");
+                refreshCaptcha("admin");
+            }
+        }
+
+        function openPage(pageName) {
+            document.querySelectorAll(".page").forEach(page => {
+                page.classList.remove("active");
+            });
+
+            const targetPage = document.getElementById("page-" + pageName);
+            if (!targetPage) {
+                console.warn("Page not found:", pageName);
+                return;
+            }
+
+            targetPage.classList.add("active");
+
+            document.querySelectorAll(".nav button").forEach(button => {
+                button.classList.toggle(
+                    "active",
+                    button.dataset.page === pageName
+                );
+            });
+
+            sidebar.classList.remove("open");
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        function renderServices(searchText = "") {
+            const query = searchText.toLowerCase().trim();
+
+            const filtered = services.filter(service => {
+                return (
+                    service.name.toLowerCase().includes(query) ||
+                    service.description.toLowerCase().includes(query)
+                );
+            });
+
+            const homeServices = document.getElementById("homeServices");
+
+            if (!filtered.length) {
+                homeServices.innerHTML =
+                    '<div class="panel">No matching services found.</div>';
+                return;
+            }
+
+            homeServices.innerHTML = filtered
+                .map(service => {
+                    return `
+            <article class="service-card">
+              <div class="service-icon">${service.icon}</div>
+              <h3>${service.name}</h3>
+              <p>${service.description}</p>
+
+              <button
+                class="btn btn-primary"
+                data-open-page="${service.id}"
+              >
+                Open Service
+              </button>
+            </article>
+          `;
+                })
+                .join("");
+
+            document
+                .querySelectorAll("[data-open-page]")
+                .forEach(button => {
+                    button.addEventListener("click", () => {
+                        openPage(button.dataset.openPage);
+                    });
+                });
+        }
+
+        function renderAdminUsers() {
+            const table = document.getElementById("userTable");
+            document.getElementById("totalUsers").textContent = users.length;
+            document.getElementById("totalRequests").textContent = supportRequests.length;
+            if (!users.length) { table.innerHTML = `<p style="color:#667085;">No registered users yet.</p>`; return; }
+            table.innerHTML = `<div style="overflow-x:auto;"><table class="user-table"><thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Status</th><th>Action</th></tr></thead><tbody>${users.map(user => `<tr><td>${escapeHtml(user.full_name || user.name)}</td><td>${escapeHtml(user.mobile)}</td><td>${escapeHtml(user.email)}</td><td>${user.is_active === false ? "Inactive" : "Active"}</td><td class="user-actions"><button class="remove-user-btn" data-remove-user="${escapeHtml(user.mobile)}">Remove</button></td></tr>`).join("")}</tbody></table></div>`;
+            document.querySelectorAll("[data-remove-user]").forEach(button => button.addEventListener("click", () => removeUser(button.dataset.removeUser)));
+        }
+
+        function formatSupportDate(value) {
+            if (!value) return "Unknown";
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString();
+        }
+
+        function renderSupportRequests() {
+            const list = document.getElementById("supportRequestList");
+            if (!list) return;
+            document.getElementById("totalRequests").textContent = supportRequests.length;
+
+            if (!supportRequests.length) {
+                list.innerHTML = `<div class="support-empty">📭 No support requests yet.</div>`;
+                return;
+            }
+
+            list.innerHTML = supportRequests.slice().reverse().map((request, reversedIndex) => {
+                const index = supportRequests.length - 1 - reversedIndex;
+                const message = String(request.message || "");
+                const preview = message.length > 120 ? message.slice(0,120) + "…" : message;
+                const unread = request.read !== true;
+                return `<article class="support-request-card ${unread ? "unread" : ""}">
+                    <div class="support-request-meta">
+                        <div><strong>${escapeHtml(request.name || "Unknown user")}</strong>
+                        <div style="color:var(--muted);font-size:12px;margin-top:2px;">📱 ${escapeHtml(request.mobile || "No mobile number")}</div></div>
+                        <small>${escapeHtml(formatSupportDate(request.createdAt))}</small>
+                    </div>
+                    <div class="support-request-preview">${escapeHtml(preview || "No message")}</div>
+                    <div class="support-request-actions"><button type="button" class="support-read-btn" data-read-request="${index}">${unread ? "📖 Read Request" : "👁️ Read Again"}</button></div>
+                </article>`;
+            }).join("");
+
+            document.querySelectorAll("[data-read-request]").forEach(button => {
+                button.addEventListener("click", () => openSupportRequest(Number(button.dataset.readRequest)));
+            });
+        }
+
+        function openSupportRequest(index) {
+            const request = supportRequests[index];
+            if (!request) { showToast("Support request not found."); return; }
+
+            request.read = true;
+            localStorage.setItem("zoyaSupportRequests", JSON.stringify(supportRequests));
+            document.getElementById("supportDetailName").textContent = request.name || "Unknown user";
+            document.getElementById("supportDetailMobile").textContent = request.mobile || "Not provided";
+            document.getElementById("supportDetailDate").textContent = formatSupportDate(request.createdAt);
+            document.getElementById("supportDetailMessage").textContent = request.message || "No message";
+            document.getElementById("supportModal").classList.add("show");
+            renderSupportRequests();
+        }
+
+        function closeSupportRequest() {
+            document.getElementById("supportModal").classList.remove("show");
+        }
+
+
+        async function removeUser(mobile) {
+            const user = users.find(item => item.mobile === mobile);
+            if (!user) { showToast("User not found."); return; }
+            if (!confirm(`Remove "${user.full_name || user.name}" (${user.mobile})?`)) return;
+            try { await apiRequest(`/api/admin/users/${encodeURIComponent(mobile)}`, { method: "DELETE", admin: true }); await loadAdminUsers(); showToast("User removed successfully."); }
+            catch (error) { showToast(error.message); }
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        // Authentication tabs
+
+        document
+            .getElementById("loginTab")
+            .addEventListener("click", () => {
+                switchAuthTab("login");
+            });
+
+        document
+            .getElementById("registerTab")
+            .addEventListener("click", () => {
+                switchAuthTab("register");
+            });
+
+        document
+            .getElementById("adminTab")
+            .addEventListener("click", () => {
+                switchAuthTab("admin");
+            });
+
+
+        // CAPTCHA input normalization
+        ["loginCaptchaInput", "registerCaptchaInput", "adminCaptchaInput"]
+            .forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener("input", event => {
+                        event.target.value = event.target.value
+                            .replace(/\s+/g, "")
+                            .toUpperCase()
+                            .slice(0, 6);
+                    });
+                }
+            });
+
+        // CAPTCHA typing handler
+        ["loginCaptchaInput", "registerCaptchaInput", "adminCaptchaInput"]
+            .forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener("input", () => {
+                        input.value = normalizeCaptcha(input.value).slice(0, 6);
+                    });
+                }
+            });
+
+        // CAPTCHA refresh
+
+        const refreshLoginButton = document.getElementById("refreshLoginCaptcha");
+        if (refreshLoginButton) {
+            refreshLoginButton.addEventListener("click", event => {
+                event.preventDefault();
+                refreshCaptcha("login");
+            });
+        }
+
+        const refreshRegisterCaptchaButton = document.getElementById("refreshRegisterCaptcha");
+        if (refreshRegisterCaptchaButton) {
+            refreshRegisterCaptchaButton.addEventListener("click", () => refreshCaptcha("register"));
+        }
+
+        const refreshAdminCaptchaButton = document.getElementById("refreshAdminCaptcha");
+        if (refreshAdminCaptchaButton) {
+            refreshAdminCaptchaButton.addEventListener("click", () => refreshCaptcha("admin"));
+        }
+
+        // User login
+        document.getElementById("loginForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const mobile = document.getElementById("loginMobile").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            if (!/^[0-9]{10}$/.test(mobile)) { alert("Please enter a valid 10-digit mobile number."); return; }
+            if (!isCaptchaCorrect("login")) { alert("Incorrect CAPTCHA. Please enter the 6 characters exactly as shown."); refreshCaptcha("login"); return; }
+            try {
+                const result = await apiRequest("/api/auth/login", { method: "POST", body: JSON.stringify({ mobile, password }) });
+                accessToken = result.access_token; localStorage.setItem("zoyaAccessToken", accessToken);
+                currentUser = result.user; users = users.filter(u => u.mobile !== currentUser.mobile); users.push(currentUser);
+                showUserApp();
+                document.getElementById("profileName").value = currentUser.full_name || "User";
+                document.getElementById("profileMobile").value = currentUser.mobile || mobile;
+                document.getElementById("profileEmail").value = currentUser.email || "";
+                document.getElementById("profileDistrict").value = currentUser.district || "";
+                document.getElementById("profileAddress").value = currentUser.address || "";
+                updateUserDisplayName(currentUser.full_name); showToast("Welcome, " + (currentUser.full_name || "User") + "!");
+            } catch (error) { alert(error.message); }
+        });
+
+        // User registration
+        document.getElementById("registerForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const name = document.getElementById("registerName").value.trim();
+            const mobile = document.getElementById("registerMobile").value.trim();
+            const email = document.getElementById("registerEmail").value.trim();
+            const password = document.getElementById("registerPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            if (!/^[0-9]{10}$/.test(mobile)) { alert("Please enter a valid 10-digit mobile number."); return; }
+            if (password.length < 8) { alert("Password must contain at least 8 characters."); return; }
+            if (password !== confirmPassword) { alert("Passwords do not match."); return; }
+            if (!isCaptchaCorrect("register")) { alert("Incorrect CAPTCHA. Please enter the 6 characters exactly as shown."); refreshCaptcha("register"); return; }
+            try {
+                await apiRequest("/api/auth/register", { method: "POST", body: JSON.stringify({ full_name: name, mobile, email, password }) });
+                alert("Registration completed successfully. Your account is saved in the database.");
+                event.target.reset(); switchAuthTab("login"); document.getElementById("loginMobile").value = mobile;
+            } catch (error) { alert(error.message); }
+        });
+
+        // Admin login
+        document.getElementById("adminForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const userId = document.getElementById("adminUserId").value.trim();
+            const password = document.getElementById("adminPassword").value;
+            if (!isCaptchaCorrect("admin")) { alert("Incorrect CAPTCHA. Please enter the 6 characters exactly as shown."); refreshCaptcha("admin"); return; }
+            try {
+                const result = await apiRequest("/api/admin/login", { method: "POST", body: JSON.stringify({ user_id: userId, password }) });
+                adminToken = result.access_token; localStorage.setItem("zoyaAdminToken", adminToken); showAdminDashboard();
+            } catch (error) { alert(error.message); }
+        });
+
+        // Forgot password
+
+        document
+            .getElementById("forgotPassword")
+            .addEventListener("click", () => {
+                const mobile = prompt(
+                    "Enter your registered mobile number:"
+                );
+
+                if (!mobile) {
+                    return;
+                }
+
+                alert(
+                    "Password reset OTP request created for " +
+                    mobile +
+                    ".\n\nA real application must send this OTP through a secure backend SMS provider."
+                );
+            });
+
+        // User logout
+
+        document
+            .getElementById("userLogout")
+            .addEventListener("click", () => {
+                currentUser = null;
+                updateUserDisplayName("User");
+                showAuthPage();
+                switchAuthTab("login");
+                showToast("You have been logged out.");
+            });
+
+        // Admin logout
+
+        document
+            .getElementById("adminLogout")
+            .addEventListener("click", () => {
+                adminToken = ""; localStorage.removeItem("zoyaAdminToken");
+                showAuthPage();
+                switchAuthTab("admin");
+                showToast("Admin logout successful.");
+            });
+
+        // Admin refresh
+
+        document
+            .getElementById("refreshUsers")
+            .addEventListener("click", () => {
+                renderAdminUsers();
+                showToast("User list refreshed.");
+            });
+
+        document.getElementById("refreshRequests").addEventListener("click", async () => {
+            try { await loadSupportRequests(); showToast("Support requests refreshed."); } catch (error) { showToast(error.message); }
+        });
+
+        document.getElementById("closeSupportModal").addEventListener("click", closeSupportRequest);
+        document.getElementById("supportModal").addEventListener("click", event => {
+            if (event.target.id === "supportModal") closeSupportRequest();
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeSupportRequest();
+        });
+
+        // Support form
+        document.getElementById("supportForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            try {
+                await apiRequest("/api/support", { method: "POST", body: JSON.stringify({ name: document.getElementById("supportName").value, mobile: document.getElementById("supportMobile").value, message: document.getElementById("supportMessage").value }) });
+                event.target.reset(); showToast("Support request saved.");
+            } catch (error) { showToast(error.message); }
+        });
+
+        // Profile form
+
+        document
+            .getElementById("profileForm")
+            .addEventListener("submit", event => {
+                event.preventDefault();
+
+                if (!currentUser) {
+                    showToast("Please login first.");
+                    return;
+                }
+
+                const updatedName =
+                    document.getElementById("profileName").value.trim();
+                const updatedMobile =
+                    document.getElementById("profileMobile").value.trim();
+                const updatedEmail =
+                    document.getElementById("profileEmail").value.trim();
+                const updatedDistrict =
+                    document.getElementById("profileDistrict").value;
+                const updatedAddress =
+                    document.getElementById("profileAddress").value.trim();
+
+                if (!updatedName) {
+                    alert("Please enter your full name.");
+                    return;
+                }
+
+                const originalMobile = currentUser.mobile;
+                currentUser.name = updatedName;
+                currentUser.mobile = updatedMobile;
+                currentUser.email = updatedEmail;
+                currentUser.district = updatedDistrict;
+                currentUser.address = updatedAddress;
+
+                const userIndex = users.findIndex(
+                    user => user.mobile === originalMobile
+                );
+
+                if (userIndex !== -1) {
+                    users[userIndex] = {
+                        ...users[userIndex],
+                        name: updatedName,
+                        mobile: updatedMobile,
+                        email: updatedEmail,
+                        district: updatedDistrict,
+                        address: updatedAddress
+                    };
+
+                    localStorage.setItem(
+                        "zoyaUsers",
+                        JSON.stringify(users)
+                    );
+                }
+
+                updateUserDisplayName(updatedName);
+                showToast("Profile updated successfully.");
+            });
+
+        // Profile download
+
+        document
+            .getElementById("downloadProfile")
+            .addEventListener("click", () => {
+                const profileData = {
+                    name: document.getElementById("profileName").value,
+                    mobile: document.getElementById("profileMobile").value,
+                    email: document.getElementById("profileEmail").value,
+                    district: document.getElementById("profileDistrict").value,
+                    address: document.getElementById("profileAddress").value
+                };
+
+                const file = new Blob(
+                    [JSON.stringify(profileData, null, 2)], {
+                        type: "application/json"
+                    }
+                );
+
+                const link = document.createElement("a");
+
+                link.href = URL.createObjectURL(file);
+                link.download = "zoya-profile.json";
+                link.click();
+
+                showToast("Profile data downloaded.");
+            });
+
+        // Mobile navigation
+
+        document
+            .getElementById("menuButton")
+            .addEventListener("click", () => {
+                sidebar.classList.toggle("open");
+            });
+
+        document
+            .querySelectorAll("[data-page]")
+            .forEach(button => {
+                button.addEventListener("click", () => {
+                    openPage(button.dataset.page);
+                });
+            });
+
+        // Search
+
+        document
+            .getElementById("serviceSearch")
+            .addEventListener("input", event => {
+                renderServices(event.target.value);
+            });
+
+        // Bank selector: show documents, applying steps and official portal
+        const bankSelect = document.getElementById("bankSelect");
+        const bankInfo = document.getElementById("bankInfo");
+        const selectedBankTitle = document.getElementById("selectedBankTitle");
+        const openBankPortal = document.getElementById("openBankPortal");
+
+        if (bankSelect) {
+            bankSelect.addEventListener("change", () => {
+                const selected = bankSelect.options[bankSelect.selectedIndex];
+
+                if (!bankSelect.value) {
+                    if (bankInfo) bankInfo.style.display = "none";
+                    return;
+                }
+
+                if (selectedBankTitle) {
+                    selectedBankTitle.textContent =
+                        (selected.dataset.bank || selected.textContent) +
+                        " — Documents & Applying Steps";
+                }
+
+                if (bankInfo) bankInfo.style.display = "block";
+            });
+        }
+
+        if (openBankPortal && bankSelect) {
+            openBankPortal.addEventListener("click", () => {
+                if (!bankSelect.value) {
+                    alert("Please select a bank first.");
+                    return;
+                }
+
+                window.open(bankSelect.value, "_blank", "noopener,noreferrer");
+            });
+        }
+
+
+        // Service page Back buttons
+        document.querySelectorAll("[data-back-home]").forEach(button => {
+            button.addEventListener("click", () => {
+                openPage("home");
+            });
+        });
+
+        // ================= ZOYA VOICE ASSISTANT =================
+        const zoyaVoiceButton = document.getElementById("zoyaVoiceButton");
+        const zoyaVoiceStatus = document.getElementById("zoyaVoiceStatus");
+        const zoyaVoiceText = document.getElementById("zoyaVoiceText");
+        const zoyaVoiceTitle = document.getElementById("zoyaVoiceTitle");
+        let zoyaRecognition = null;
+        let zoyaVoiceListening = false;
+
+        function zoyaVoiceSay(message) {
+            zoyaVoiceText.textContent = message;
+            zoyaVoiceStatus.classList.add("show");
+            if ("speechSynthesis" in window) {
+                try { window.speechSynthesis.cancel(); } catch (_) {}
+                const u = new SpeechSynthesisUtterance(message);
+                u.lang = (document.getElementById("language")?.value === "ta") ? "ta-IN" : "en-IN";
+                u.rate = 0.95;
+                window.speechSynthesis.speak(u);
+            }
+            setTimeout(() => zoyaVoiceStatus.classList.remove("show"), 4500);
+        }
+        function zoyaNormalizeVoice(text) { return String(text||"").toLowerCase().trim().replace(/[.,!?;:]+/g," ").replace(/\s+/g," "); }
+        function zoyaVoiceOpenService(text) {
+            const items = [["pan card","pan"],["pan","pan"],["voter id","voter"],["voter","voter"],["passport","passport"],["aadhaar","aadhaar"],["aadhar","aadhaar"],["bank account","bank"],["bank","bank"],["employment","employment"],["jobs","employment"],["job","employment"],["certificates","certificates"],["certificate","certificates"],["driving licence","licence"],["driving license","licence"],["licence","licence"],["license","licence"],["e sevai","esevai"],["esevai","esevai"],["support","support"],["assistance","support"],["help","support"],["profile","profile"]];
+            const hit = items.find(([k]) => text === k || text.includes(k));
+            if (!hit) return false;
+            openPage(hit[1]);
+            return hit[1];
+        }
+        function handleZoyaVoiceCommand(rawText) {
+            const text = zoyaNormalizeVoice(rawText);
+            if (!text) return;
+            if (text.includes("logout") || text.includes("log out") || text.includes("வெளியேறு")) { document.getElementById("userLogout")?.click(); zoyaVoiceSay("You are logged out."); return; }
+            if (text.includes("home") || text.includes("dashboard") || text.includes("முகப்பு")) { openPage("home"); zoyaVoiceSay("Opening dashboard."); return; }
+            if (text.includes("register") || text.includes("பதிவு")) { switchAuthTab("register"); zoyaVoiceSay("Opening registration."); return; }
+            if (text.includes("login") || text.includes("log in") || text.includes("உள்நுழை")) { switchAuthTab("login"); zoyaVoiceSay("Opening login."); return; }
+            if (text.includes("refresh captcha") || text.includes("new captcha")) { const f=document.querySelector(".auth-form:not(.hidden)"); const type=f?.id==="registerForm"?"register":f?.id==="adminForm"?"admin":"login"; refreshCaptcha(type); zoyaVoiceSay("CAPTCHA refreshed."); return; }
+            if (text.startsWith("search ") || text.startsWith("find ") || text.includes("தேடு")) { const q=text.replace(/^(search|find)\s+/,"").replace("தேடு","").trim(); openPage("home"); const box=document.getElementById("serviceSearch"); if(box){box.value=q;box.dispatchEvent(new Event("input",{bubbles:true}));} zoyaVoiceSay(`Searching for ${q}.`); return; }
+            const page=zoyaVoiceOpenService(text); if(page){ zoyaVoiceSay(`Opening ${page}.`); return; }
+            if (text.includes("open official pan") || text.includes("pan official")) { window.open("https://www.protean-tinpan.com/","_blank","noopener,noreferrer"); zoyaVoiceSay("Opening the official PAN portal."); return; }
+            if (text.includes("open voter portal") || text.includes("official voter")) { window.open("https://voters.eci.gov.in/","_blank","noopener,noreferrer"); zoyaVoiceSay("Opening the official voter portal."); return; }
+            if (text.includes("open passport portal") || text.includes("official passport")) { window.open("https://www.passportindia.gov.in/","_blank","noopener,noreferrer"); zoyaVoiceSay("Opening the official Passport Seva portal."); return; }
+            if (text.includes("open aadhaar portal") || text.includes("official aadhaar")) { window.open("https://uidai.gov.in/","_blank","noopener,noreferrer"); zoyaVoiceSay("Opening the official UIDAI portal."); return; }
+            if (text.includes("scroll down") || text.includes("கீழே")) { window.scrollBy({top:window.innerHeight*.8,behavior:"smooth"}); zoyaVoiceSay("Scrolling down."); return; }
+            if (text.includes("scroll up") || text.includes("மேலே")) { window.scrollBy({top:-window.innerHeight*.8,behavior:"smooth"}); zoyaVoiceSay("Scrolling up."); return; }
+            zoyaVoiceSay("I did not understand. Try open PAN card, open profile, search bank account, or logout.");
+        }
+        function startZoyaVoice() {
+            const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+            if(!Recognition){zoyaVoiceSay("Voice recognition is not supported here. Try Chrome or Edge.");return;}
+            if(zoyaVoiceListening){zoyaRecognition?.stop();return;}
+            zoyaRecognition=new Recognition();
+            zoyaRecognition.lang=(document.getElementById("language")?.value==="ta")?"ta-IN":"en-IN";
+            zoyaRecognition.interimResults=false; zoyaRecognition.maxAlternatives=1;
+            zoyaRecognition.onstart=()=>{zoyaVoiceListening=true;zoyaVoiceButton.classList.add("listening");zoyaVoiceStatus.classList.add("show");zoyaVoiceTitle.textContent="Listening…";zoyaVoiceText.textContent="Speak your command.";};
+            zoyaRecognition.onresult=e=>{const heard=e.results?.[0]?.[0]?.transcript||"";zoyaVoiceTitle.textContent="You said";zoyaVoiceText.textContent=heard;handleZoyaVoiceCommand(heard);};
+            zoyaRecognition.onerror=e=>zoyaVoiceSay(e.error==="not-allowed"?"Microphone permission was denied. Please allow microphone access.":"I could not hear that. Please try again.");
+            zoyaRecognition.onend=()=>{zoyaVoiceListening=false;zoyaVoiceButton.classList.remove("listening");zoyaVoiceTitle.textContent="Zoya Voice Assistant";};
+            try{zoyaRecognition.start();}catch(_){ }
+        }
+        window.zoyaVoiceCommand=handleZoyaVoiceCommand;
+        zoyaVoiceButton?.addEventListener("click",startZoyaVoice);
+        const _showUserApp=showUserApp; showUserApp=function(){_showUserApp();zoyaVoiceButton?.classList.add("show");};
+        const _showAuthPage=showAuthPage; showAuthPage=function(){_showAuthPage();zoyaVoiceButton?.classList.remove("show");};
+        const _showAdminDashboard=showAdminDashboard; showAdminDashboard=function(){_showAdminDashboard();zoyaVoiceButton?.classList.remove("show");};
+        // ================= END VOICE ASSISTANT =================
+
+        // Initial setup
+
+        refreshCaptcha("login");
+        refreshCaptcha("register");
+        refreshCaptcha("admin");
+
+        renderServices();
+        showAuthPage();
+    </script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("/service-worker.js").catch(()=>{}));}</script>
+</body>
+
+</html>
